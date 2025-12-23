@@ -4,6 +4,7 @@ import { ShelfItem } from "@/lib/data";
 import Slot from "./Slot";
 import Polaroid from "./Polaroid";
 import ProgressIndicator from "./ProgressIndicator";
+import ExperienceDetails from "./ExperienceDetails";
 import { getDeterministicRotation } from "@/lib/utils";
 
 interface ShelfProps {
@@ -54,7 +55,7 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
               return (
                 <div
                   key={item.slotId}
-                  className="relative w-full flex items-center px-4"
+                  className="relative w-full flex items-center px-4 gap-4"
                   style={{ height: `${SHELF_HEIGHT}px` }}
                 >
                   {/* Shelf Row Background - Full width shelf */}
@@ -62,7 +63,7 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
                   
                   {/* Slot Cutout - Full height, exact Polaroid width, positioned on left */}
                   <div
-                    className="relative flex items-center justify-center"
+                    className="relative flex items-center justify-center flex-shrink-0 z-10"
                     style={{
                       width: `${polaroidWidth}px`,
                       height: `${SHELF_HEIGHT}px`,
@@ -93,6 +94,11 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
                       </div>
                     )}
                   </div>
+                  
+                  {/* Details appear to the right of the Polaroid on the same shelf */}
+                  {isFilled && (
+                    <ExperienceDetails item={item} shelfHeight={SHELF_HEIGHT} />
+                  )}
                 </div>
               );
             })}

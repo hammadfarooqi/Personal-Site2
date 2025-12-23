@@ -5,9 +5,10 @@ import { ShelfItem } from "@/lib/data";
 
 interface ExperienceDetailsProps {
   item: ShelfItem | null;
+  shelfHeight: number;
 }
 
-export default function ExperienceDetails({ item }: ExperienceDetailsProps) {
+export default function ExperienceDetails({ item, shelfHeight }: ExperienceDetailsProps) {
   return (
     <AnimatePresence mode="wait">
       {item && (
@@ -17,19 +18,21 @@ export default function ExperienceDetails({ item }: ExperienceDetailsProps) {
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="
-            fixed right-2 md:right-4 top-1/2 -translate-y-1/2
-            w-[calc(100vw-1rem)] sm:w-80 md:w-96
-            bg-shelf-light rounded-lg p-4 md:p-6 shadow-xl
+            flex-1 ml-4 md:ml-6
+            bg-shelf-light rounded-lg p-3 md:p-4 shadow-lg
             border-2 border-slot-outline
-            max-h-[80vh] overflow-y-auto
-            z-40
-            hidden lg:block
+            overflow-y-auto
+            relative z-10
           "
+          style={{ 
+            maxHeight: `${shelfHeight}px`,
+            minHeight: `${shelfHeight}px`,
+          }}
         >
-          <h3 className="text-2xl font-bold text-text-primary mb-4 font-handwritten">
+          <h3 className="text-lg md:text-xl font-bold text-text-primary mb-2 md:mb-3 font-handwritten">
             {item.title}
           </h3>
-          <p className="text-text-secondary leading-relaxed text-sm md:text-base">
+          <p className="text-text-secondary leading-relaxed text-xs md:text-sm">
             {item.details}
           </p>
         </motion.div>
