@@ -48,9 +48,10 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
 
           {/* Individual Shelf Rows - One per experience */}
           <div className="space-y-4 md:space-y-6 mb-8 md:mb-12 pb-32 md:pb-40">
-            {items.map((item) => {
+            {items.map((item, index) => {
               const polaroidWidth = getPolaroidWidth(item, SHELF_HEIGHT);
               const isFilled = slottedItems.has(item.id);
+              const isLeftSide = index % 2 === 0; // Alternate: even index = left, odd = right
               
               return (
                 <div
@@ -61,9 +62,14 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
                   {/* Shelf Row Background - Full width shelf */}
                   <div className="absolute inset-0 bg-shelf-dark rounded-lg border-2 border-slot-outline/30 shadow-sm" />
                   
-                  {/* Slot Cutout - Full height, exact Polaroid width, positioned on left */}
+                  {/* Details appear on the left when cutout is on the right */}
+                  {isFilled && !isLeftSide && (
+                    <ExperienceDetails item={item} shelfHeight={SHELF_HEIGHT} />
+                  )}
+                  
+                  {/* Slot Cutout - Full height, exact Polaroid width, alternates sides */}
                   <div
-                    className="relative flex items-center justify-center flex-shrink-0 z-10"
+                    className={`relative flex items-center justify-center flex-shrink-0 z-10 ${!isLeftSide ? 'ml-auto' : ''}`}
                     style={{
                       width: `${polaroidWidth}px`,
                       height: `${SHELF_HEIGHT}px`,
@@ -95,8 +101,8 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
                     )}
                   </div>
                   
-                  {/* Details appear to the right of the Polaroid on the same shelf */}
-                  {isFilled && (
+                  {/* Details appear to the right of the Polaroid when cutout is on the left */}
+                  {isFilled && isLeftSide && (
                     <ExperienceDetails item={item} shelfHeight={SHELF_HEIGHT} />
                   )}
                 </div>

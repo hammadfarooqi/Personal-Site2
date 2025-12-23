@@ -106,10 +106,24 @@ export default function Polaroid({
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="w-full h-full bg-polaroid border-4 border-polaroid-border rounded-sm shadow-polaroid p-2 flex flex-col items-center justify-center">
-          <p className="font-handwritten text-lg md:text-xl text-text-primary text-center">
-            {item.title}
-          </p>
+        <div className="w-full h-full bg-polaroid border-4 border-polaroid-border shadow-polaroid flex flex-col overflow-hidden">
+          {/* Image area with white padding */}
+          <div className="flex-1 bg-polaroid select-none p-2 md:p-3 min-h-0">
+            <div className="w-full h-full overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover pointer-events-none"
+                draggable={false}
+              />
+            </div>
+          </div>
+          {/* Caption area at bottom */}
+          <div className="bg-polaroid px-2 py-1 md:py-2 flex items-center justify-center border-t border-polaroid-border/30 select-none flex-shrink-0">
+            <p className="font-handwritten text-xs md:text-sm text-text-primary text-center leading-tight pointer-events-none">
+              {item.caption}
+            </p>
+          </div>
         </div>
       </motion.div>
     );
@@ -155,8 +169,8 @@ export default function Polaroid({
         )}
         <div
           className={`
-            relative bg-polaroid border-4 border-polaroid-border rounded-sm shadow-polaroid p-2 md:p-3
-            flex flex-col items-center justify-center
+            relative bg-polaroid border-4 border-polaroid-border shadow-polaroid
+            flex flex-col overflow-hidden
             ${snapped ? "shadow-glow" : ""}
             transition-shadow duration-300
           `}
@@ -167,9 +181,23 @@ export default function Polaroid({
             minWidth: fixedWidth ? undefined : "120px",
           }}
         >
-          <p className="font-handwritten text-base md:text-lg text-text-primary text-center">
-            {item.title}
-          </p>
+          {/* Image area with white padding */}
+          <div className="flex-1 bg-polaroid select-none p-2 md:p-3 min-h-0">
+            <div className="w-full h-full overflow-hidden">
+              <img
+                src={item.image}
+                alt={item.title}
+                className="w-full h-full object-cover pointer-events-none"
+                draggable={false}
+              />
+            </div>
+          </div>
+          {/* Caption area at bottom */}
+          <div className="bg-polaroid px-2 py-1 md:py-2 flex items-center justify-center border-t border-polaroid-border/30 select-none flex-shrink-0">
+            <p className="font-handwritten text-xs md:text-sm text-text-primary text-center leading-tight pointer-events-none">
+              {item.caption}
+            </p>
+          </div>
         </div>
       </div>
     </motion.div>
