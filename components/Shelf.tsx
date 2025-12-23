@@ -115,7 +115,7 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
                   key={item.id} 
                   className="pointer-events-auto" 
                   style={{ 
-                    transform: `translateY(${SHELF_HEIGHT * 0.25}px)`,
+                    transform: `translateY(${SHELF_HEIGHT * 0.1}px)`,
                   }}
                 >
                   <Polaroid
@@ -125,6 +125,7 @@ export default function Shelf({ items, slottedItems, onItemSlot }: ShelfProps) {
                     onSnap={() => onItemSlot(item.id)}
                     fixedWidth={polaroidWidth}
                     fixedHeight={SHELF_HEIGHT}
+                    initialY={SHELF_HEIGHT * 0.1}
                   />
                 </div>
               );

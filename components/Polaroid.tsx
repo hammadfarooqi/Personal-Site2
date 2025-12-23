@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { ShelfItem } from "@/lib/data";
 import { useEffect, useRef, useState } from "react";
 import { getElementCenter, isWithinThreshold } from "@/lib/utils";
@@ -12,6 +12,7 @@ interface PolaroidProps {
   onSnap?: () => void;
   fixedWidth?: number;
   fixedHeight?: number;
+  initialY?: number; // Initial Y position for gravity fallback
 }
 
 export default function Polaroid({
@@ -21,13 +22,14 @@ export default function Polaroid({
   onSnap,
   fixedWidth,
   fixedHeight,
+  initialY = 0,
 }: PolaroidProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [snapped, setSnapped] = useState(false);
   const [showFlash, setShowFlash] = useState(false);
   const polaroidRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
-  const y = useMotionValue(0);
+  const y = useMotionValue(initialY);
 
   useEffect(() => {
     if (isSlotted) {
@@ -75,9 +77,17 @@ export default function Polaroid({
         onSnap();
       }, 300);
     } else {
-      // Return to original position
-      x.set(0);
-      y.set(0);
+      // Fall straight down from current horizontal position with gravity
+      // Keep X where it is, only animate Y down to initial position
+      // Use lower stiffness and damping for more natural gravity feel
+      animate(y, initialY, {
+        type: "spring",
+        stiffness: 100, // Lower stiffness for slower, more natural fall
+        damping: 15, // Lower damping to allow more acceleration
+        mass: 2, // Heavier mass for more gravity effect
+        velocity: info.velocity.y || 0, // Use the drag velocity for more natural feel
+      });
+      // X stays at current position (wherever it was released)
     }
   };
 
@@ -128,8 +138,9 @@ export default function Polaroid({
       }}
       transition={{
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 200,
+        damping: 25,
+        mass: 1.2, // Slightly heavier for more gravity feel
       }}
     >
       <div className="relative">
